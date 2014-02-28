@@ -17,18 +17,21 @@ public class CursoTest {
 
 	@Test
 	public void matricularAlumnoConExito() {
+		curso.vaciarCurso();
 		Alumno alumno = new Alumno("Andres Gonzales");
 		curso.matricular(alumno);
 		Assert.assertTrue(curso.estaMatriculado(alumno));
 	}
 	@Test(expected = CursoException.class)
 	public void errorMatricularAlumnoDuplicado() {
+		curso.vaciarCurso();
 		Alumno alumno = new Alumno("Andres Gonzales");
 		curso.matricular(alumno);
 		curso.matricular(alumno);
 	}
 	@Test(expected = CursoException.class)
 	public void errorMatricularCursoLleno() {
+		curso.vaciarCurso();
 		for (int i = 1; i <= 5; i++) {
 			curso.matricular(new Alumno("Alumno " + i));
 		}

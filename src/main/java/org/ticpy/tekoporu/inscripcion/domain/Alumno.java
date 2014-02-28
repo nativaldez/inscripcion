@@ -1,6 +1,16 @@
 package org.ticpy.tekoporu.inscripcion.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Alumno {
+	
+	@Id
+	@GeneratedValue
+	private Integer matricula;
+	
 	private String nombre;
 
 	public Alumno() {
@@ -16,6 +26,14 @@ public class Alumno {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+	
+	public Integer getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(Integer matricula) {
+		this.matricula = matricula;
 	}
 
 	@Override
