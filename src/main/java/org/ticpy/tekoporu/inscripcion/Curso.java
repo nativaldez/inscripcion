@@ -12,6 +12,7 @@ import org.ticpy.tekoporu.inscripcion.config.InscripcionConfig;
 import org.ticpy.tekoporu.inscripcion.domain.Alumno;
 import org.ticpy.tekoporu.inscripcion.excepcion.CursoException;
 import org.ticpy.tekoporu.stereotype.Controller;
+import org.ticpy.tekoporu.transaction.Transactional;
 import org.ticpy.tekoporu.util.ResourceBundle;
 
 @Controller
@@ -30,7 +31,8 @@ public class Curso {
 
 	@Inject
 	private EntityManager em;
-
+	
+	@Transactional
 	public void matricular(Alumno alumno) {
 		if (estaMatriculado(alumno)
 				|| obtenerAlumnosMatriculados().size() == config
@@ -38,9 +40,7 @@ public class Curso {
 			throw new CursoException();
 		}
 
-		em.getTransaction().begin();
 		em.persist(alumno);
-		em.getTransaction().commit();
 
 		logger.info(bundle.getString("matricula.exito", alumno.getNombre()));
 	}
@@ -53,13 +53,12 @@ public class Curso {
 		return em.createQuery("select a from Alumno a").getResultList();
 	}
 	
+	@Transactional
 	public void vaciarCurso(){
-		em.getTransaction().begin();
 		List<Alumno> alumnos = obtenerAlumnosMatriculados();
 		for (Alumno alumno : alumnos) {
 			em.remove(alumno);
 		}
-		em.getTransaction().commit();
 	}
 
 	@ExceptionHandler
