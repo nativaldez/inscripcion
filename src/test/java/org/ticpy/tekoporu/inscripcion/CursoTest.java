@@ -3,12 +3,14 @@ package org.ticpy.tekoporu.inscripcion;
 import javax.inject.Inject;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.ticpy.tekoporu.inscripcion.business.CursoBC;
 import org.ticpy.tekoporu.inscripcion.domain.Alumno;
 import org.ticpy.tekoporu.inscripcion.excepcion.CursoException;
 import org.ticpy.tekoporu.junit.DemoiselleRunner;
+import org.ticpy.tekoporu.security.SecurityContext;
 
 @RunWith(DemoiselleRunner.class)
 public class CursoTest {
@@ -37,5 +39,12 @@ public class CursoTest {
 			curso.matricular(new Alumno("Alumno " + i));
 		}
 			curso.matricular(new Alumno("Alumno 6"));
+	}
+	
+	@Inject
+	private SecurityContext securityContext;
+	@Before
+	public void setUp(){
+		securityContext.login();
 	}
 }
