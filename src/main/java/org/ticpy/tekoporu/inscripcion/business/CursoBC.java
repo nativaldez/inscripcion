@@ -9,6 +9,8 @@ import org.ticpy.tekoporu.exception.ExceptionHandler;
 import org.ticpy.tekoporu.inscripcion.config.InscripcionConfig;
 import org.ticpy.tekoporu.inscripcion.domain.Alumno;
 import org.ticpy.tekoporu.inscripcion.excepcion.CursoException;
+import org.ticpy.tekoporu.lifecycle.Startup;
+import org.ticpy.tekoporu.security.RequiredPermission;
 import org.ticpy.tekoporu.stereotype.BusinessController;
 import org.ticpy.tekoporu.transaction.Transactional;
 import org.ticpy.tekoporu.util.ResourceBundle;
@@ -29,6 +31,7 @@ public class CursoBC {
 	private AlumnoBC alumnoBC;
 
 	@Transactional
+	@RequiredPermission(resource = "curso", operation = "matricular")
 	public void matricular(Alumno alumno) {
 		if (estaMatriculado(alumno)
 				|| obtenerAlumnosMatriculados().size() == config
@@ -51,6 +54,7 @@ public class CursoBC {
 		}
 	}
 
+	@RequiredPermission(resource = "curso", operation = "consular")
 	public boolean estaMatriculado(Alumno alumno) {
 		return obtenerAlumnosMatriculados().contains(alumno);
 	}
@@ -59,5 +63,10 @@ public class CursoBC {
 	public void tratar(CursoException e) {
 		logger.warn(bundle.getString("matricula.error"));
 		throw e;
+	}
+	
+	@Startup
+	public void iniciar(){
+		logger.info("Iniciando ...");
 	}
 }
