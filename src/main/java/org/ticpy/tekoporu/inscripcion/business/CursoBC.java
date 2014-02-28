@@ -1,4 +1,4 @@
-package org.ticpy.tekoporu.inscripcion;
+package org.ticpy.tekoporu.inscripcion.business;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +11,13 @@ import org.ticpy.tekoporu.exception.ExceptionHandler;
 import org.ticpy.tekoporu.inscripcion.config.InscripcionConfig;
 import org.ticpy.tekoporu.inscripcion.domain.Alumno;
 import org.ticpy.tekoporu.inscripcion.excepcion.CursoException;
-import org.ticpy.tekoporu.stereotype.Controller;
+import org.ticpy.tekoporu.inscripcion.persistence.AlumnoDAO;
+import org.ticpy.tekoporu.stereotype.BusinessController;
 import org.ticpy.tekoporu.transaction.Transactional;
 import org.ticpy.tekoporu.util.ResourceBundle;
 
-@Controller
-public class Curso {
-
-	private List<Alumno> alumnosMatriculados = new ArrayList<Alumno>();
+@BusinessController
+public class CursoBC {
 
 	@Inject
 	private Logger logger;
@@ -30,8 +29,8 @@ public class Curso {
 	private InscripcionConfig config;
 
 	@Inject
-	private EntityManager em;
-	
+	private AlumnoDAO alumnoDAO;
+
 	@Transactional
 	public void matricular(Alumno alumno) {
 		if (estaMatriculado(alumno)
@@ -39,26 +38,24 @@ public class Curso {
 						.getCapacidadCurso()) {
 			throw new CursoException();
 		}
-
-		em.persist(alumno);
-
+		alumnoDAO.insert(alumno);
 		logger.info(bundle.getString("matricula.exito", alumno.getNombre()));
+	}
+
+	private List<Alumno> obtenerAlumnosMatriculados() {
+		return alumnoDAO.findAll();
+	}
+
+	@Transactional
+	public void vaciarCurso() {
+		List<Alumno> alumnos = obtenerAlumnosMatriculados();
+		for (Alumno alumno : alumnos) {
+			alumnoDAO.delete(alumno);
+		}
 	}
 
 	public boolean estaMatriculado(Alumno alumno) {
 		return obtenerAlumnosMatriculados().contains(alumno);
-	}
-
-	private List<Alumno> obtenerAlumnosMatriculados() {
-		return em.createQuery("select a from Alumno a").getResultList();
-	}
-	
-	@Transactional
-	public void vaciarCurso(){
-		List<Alumno> alumnos = obtenerAlumnosMatriculados();
-		for (Alumno alumno : alumnos) {
-			em.remove(alumno);
-		}
 	}
 
 	@ExceptionHandler
