@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.ticpy.tekoporu.inscripcion.business.CursoBC;
 import org.ticpy.tekoporu.inscripcion.domain.Alumno;
 import org.ticpy.tekoporu.inscripcion.excepcion.CursoException;
+import org.ticpy.tekoporu.inscripcion.security.Credenciales;
 import org.ticpy.tekoporu.junit.DemoiselleRunner;
 import org.ticpy.tekoporu.security.SecurityContext;
 
@@ -25,6 +26,7 @@ public class CursoTest {
 		curso.matricular(alumno);
 		Assert.assertTrue(curso.estaMatriculado(alumno));
 	}
+
 	@Test(expected = CursoException.class)
 	public void errorMatricularAlumnoDuplicado() {
 		curso.vaciarCurso();
@@ -32,19 +34,26 @@ public class CursoTest {
 		curso.matricular(alumno);
 		curso.matricular(alumno);
 	}
+
 	@Test(expected = CursoException.class)
 	public void errorMatricularCursoLleno() {
 		curso.vaciarCurso();
 		for (int i = 1; i <= 5; i++) {
 			curso.matricular(new Alumno("Alumno " + i));
 		}
-			curso.matricular(new Alumno("Alumno 6"));
+		curso.matricular(new Alumno("Alumno 6"));
 	}
-	
+
 	@Inject
 	private SecurityContext securityContext;
+	
+	@Inject
+	private Credenciales credenciales;
+
 	@Before
-	public void setUp(){
+	public void setUp() {
+		credenciales.setNombre("secretaria");
+		credenciales.setContraseña("secreto");
 		securityContext.login();
 	}
 }
