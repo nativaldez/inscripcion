@@ -19,8 +19,11 @@ public class Curso {
 	private ResourceBundle bundle;
 
 	public void matricular(String alumno) {
+		if (estaMatriculado(alumno) || alumnosMatriculados.size() == 5) {
+			throw new RuntimeException();
+		}
 		alumnosMatriculados.add(alumno);
-		logger.info(bundle.getString("matricula.exito",alumno));
+		logger.info(bundle.getString("matricula.exito", alumno));
 	}
 
 	public boolean estaMatriculado(String alumno) {
