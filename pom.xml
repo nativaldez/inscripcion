@@ -21,12 +21,7 @@
 	</parent>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se-core</artifactId>
-			<version>1.1.8.Final</version>
-			<scope>test</scope>
-		</dependency>
+		
 		<dependency>
 			<groupId>org.ticpy.tekoporu.component</groupId>
 			<artifactId>tekoporu-junit</artifactId>
@@ -43,14 +38,5 @@
 			<artifactId>tekoporu-jpa</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-		</dependency>
 	</dependencies>
 </project>
