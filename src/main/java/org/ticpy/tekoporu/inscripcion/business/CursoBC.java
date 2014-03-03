@@ -42,7 +42,7 @@ public class CursoBC {
 		logger.info(bundle.getString("matricula.exito", alumno.getNombre()));
 	}
 
-	private List<Alumno> obtenerAlumnosMatriculados() {
+	public List<Alumno> obtenerAlumnosMatriculados() {
 		return alumnoBC.findAll();
 	}
 
