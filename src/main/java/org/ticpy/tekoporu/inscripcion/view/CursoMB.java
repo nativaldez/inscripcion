@@ -2,6 +2,8 @@ package org.ticpy.tekoporu.inscripcion.view;
 
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -34,11 +36,17 @@ public class CursoMB {
 	public void setNombreAlumno(String nombreAlumno) {
 		this.nombreAlumno = nombreAlumno;
 	}
+	
+	@Inject
+	private FacesContext facesContext;
 
 	@Transactional
 	public void matricular() {
 		bc.matricular(new Alumno(nombreAlumno));
-		String mensaje = bundle.getString("matricula.exito", nombreAlumno);
+		facesContext.addMessage("sucesso", new FacesMessage("Registro realizado con éxito"));
+		String mensaje = bundle.getString("matricula.exito",nombreAlumno);
 		logger.info(mensaje);
 	}
+
+		
 }
