@@ -37,13 +37,9 @@ public class CursoMB {
 		this.nombreAlumno = nombreAlumno;
 	}
 	
-	@Inject
-	private FacesContext facesContext;
-
 	@Transactional
 	public void matricular() {
 		bc.matricular(new Alumno(nombreAlumno));
-		facesContext.addMessage("sucesso", new FacesMessage("Registro realizado con éxito"));
 		String mensaje = bundle.getString("matricula.exito",nombreAlumno);
 		logger.info(mensaje);
 	}

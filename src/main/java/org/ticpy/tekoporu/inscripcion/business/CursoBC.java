@@ -10,6 +10,7 @@ import org.ticpy.tekoporu.inscripcion.config.InscripcionConfig;
 import org.ticpy.tekoporu.inscripcion.domain.Alumno;
 import org.ticpy.tekoporu.inscripcion.excepcion.CursoException;
 import org.ticpy.tekoporu.lifecycle.Startup;
+import org.ticpy.tekoporu.message.MessageContext;
 import org.ticpy.tekoporu.security.RequiredPermission;
 import org.ticpy.tekoporu.stereotype.BusinessController;
 import org.ticpy.tekoporu.transaction.Transactional;
@@ -29,6 +30,9 @@ public class CursoBC {
 
 	@Inject
 	private AlumnoBC alumnoBC;
+	
+	@Inject
+	private MessageContext messageContext;
 
 	@Transactional
 	@RequiredPermission(resource = "curso", operation = "matricular")
@@ -39,7 +43,8 @@ public class CursoBC {
 			throw new CursoException();
 		}
 		alumnoBC.insert(alumno);
-		logger.info(bundle.getString("matricula.exito", alumno.getNombre()));
+		String mensaje= bundle.getString("matricula.exito", alumno.getNombre());
+		messageContext.add(mensaje);
 	}
 
 	public List<Alumno> obtenerAlumnosMatriculados() {
